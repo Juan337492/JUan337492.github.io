@@ -15,7 +15,11 @@
   <title>My Portfolio</title>
   
   <!-- Add any necessary CSS files or links here -->
-  
+  <style>
+    #target-div {
+      height: 16rem; /* This is equivalent to height: 16rem; */
+    }
+  </style>
 </head>
 <body>
     <nav aria-label="Site Nav" class="mx-auto flex max-w-3xl items-center justify-between p-4">
@@ -35,11 +39,95 @@
         </ul>
       </nav>
       
-  <!-- Add your website content here -->
+      <main>
+        <h1 style="font-family: 'Open Sans', sans-serif;" class="font-semibold text-center">My projects</h1>
+        <div class="flex flex-wrap flex-row overflow-hidden justify-center">
+
+          <div class="bg-black rounded-lg w-1/2 flex flex-wrap items-center justify-center mt-5 px-2 py-2">
+            <a href="https://dynamicroofingandconstruction.us/" class="w-3/4"><img src="../assets/logo.png" ></a>
+            <p class="text-white pb-3 " style="font-family: 'Source Code Pro', monospace;">Coded a website for a Roofing company.</p>
+          </div>
+
+          <div class="mt-10">
+            <p class="px-5 mb-2" style="font-family: 'Source Code Pro', monospace;">I am working on a Target clone web app with a built-in AI assistant named <span class="text-red-800">Bullseye</span>. The AI assistant will be able to help store guests
+               find products in store quickly, recommend products, and guest will be able to schedule an in-store optical appointment.</p>
+            </div>
+
+            <div class="rounded-lg">
+              <div class="w-1/3 h-90" id="target-div"></div>
+            </div>
+            
+          
+
+        </div>
+      </main>
+      
+      
   
   <!-- Add any necessary JavaScript files or links here -->
   
 </body>
-<script src="style.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 15.0;
+  camera.position.y = -10; // Change this value to move the camera up or down
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0xffffff);
+  const targetDiv = document.getElementById("target-div");
+  targetDiv.appendChild(renderer.domElement);
+
+  // Create a circle shape for the outer ring
+  const outerRingShape = new THREE.Shape();
+  outerRingShape.absarc(0, 0, 1.5, 0, Math.PI * 2);
+
+  // Create a hole shape for the inner ring
+  const innerRingShape = new THREE.Shape();
+  innerRingShape.absarc(0, 0, 1.2, 0, Math.PI * 2);
+
+  // Subtract the hole from the circle
+  outerRingShape.holes.push(innerRingShape);
+
+  // Create a geometry from the shape
+  const ringGeometry = new THREE.ExtrudeGeometry(outerRingShape, { amount: 0.5, bevelEnabled: false });
+
+  // Create a material for the ring
+  const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+
+  // Create a mesh from the geometry and material
+  const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+
+   // Add the ring to the scene
+   scene.add(ring);
+
+   // Create a circle shape for the center dot
+   const dotShape = new THREE.Shape();
+   dotShape.absarc(0 , 0 , .3 , .3 , Math.PI *2 );
+
+   //Create a geometry from shape 
+   const dotGeometry= new THREE.ExtrudeGeometry(dotShape , {amount : .5 , bevelEnabled : false});
+
+   //Create material for dot 
+   const dotMaterial= new THREE.MeshBasicMaterial({color : 0xE9E9E9});
+
+   //Create mesh from geometry and material 
+   const dot= new THREE.Mesh(dotGeometry ,dotMaterial );
+
+   //Add dot to scene 
+   scene.add(dot);
+   
+function animate() {
+    requestAnimationFrame(animate);
+    ring.rotation.x += 0.01;
+    ring.rotation.y += 0.01;
+    dot.rotation.x += .01;
+    dot.rotation.y += .01; // Add this value to rotate the dot around y-axis
+    
+    renderer.render(scene,camera);
+}
+animate();
+</script>
 </html>
